@@ -2,16 +2,16 @@
 provider "aws" {
   alias = "us-east-1"  
   region =  "us-east-1"
-  access_key = aws_access_key
-  secret_key = aws_secret_key
+  access_key = var.aws_access_key
+  secret_key = var.aws_access_key
 
 }
 
 provider "aws" {
   alias = "us-west-2"
   region =  "us-west-2"
-  access_key = aws_access_key
-  secret_key = aws_secret_key
+  access_key = var.aws_access_key
+  secret_key = var.aws_access_key
 }
 
 #creating a VPC for east
