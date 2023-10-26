@@ -19,9 +19,9 @@ sudo apt update
 
 sudo apt install -y python3.7-dev
 
-python3.7 -m venv temp
+python3.7 -m venv test
 
-source temp/bin/activate
+source test/bin/activate
 
 pip install mysqlclient
 
@@ -29,3 +29,22 @@ pip install gunicorn
 
 deactivate
 
+python3.7 -m venv test
+
+source test/bin/activate
+
+pip install pip --upgrade
+
+pip install -r requirements.txt
+
+pip install gunicorn
+
+python database.py
+
+sleep 1
+
+python load_data.py
+
+sleep 1 
+
+python -m gunicorn app:app -b 0.0.0.0 -D && echo "Done"
