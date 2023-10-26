@@ -19,6 +19,8 @@ sudo apt update
 
 sudo apt install -y python3.7-dev
 
+set -e
+
 python3.7 -m venv test
 
 source test/bin/activate
