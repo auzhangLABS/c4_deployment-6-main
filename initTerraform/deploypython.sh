@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 sudo apt update
 
 sudo apt install -y software-properties-common 
@@ -15,25 +14,19 @@ sudo apt install -y build-essential
 
 sudo apt install -y libmysqlclient-dev
 
-sudo apt update
-
 sudo apt install -y python3.7-dev
 
-set -e
+sudo apt update
 
-python3.7 -m venv test
+/usr/bin/git clone https://github.com/auzhangLABS/c4_deployment-6-main.git /home/ubuntu/c4_deployment-6-main
 
-source test/bin/activate
+cd /home/ubuntu/c4_deployment-6-main && /usr/bin/python3.7 -m venv /home/ubuntu/c4_deployment-6-main/test
+
+source /home/ubuntu/c4_deployment-6-main/test/bin/activate
 
 pip install mysqlclient
 
 pip install gunicorn
-
-deactivate
-
-python3.7 -m venv test
-
-source test/bin/activate
 
 pip install pip --upgrade
 
@@ -50,3 +43,8 @@ python load_data.py
 sleep 1 
 
 python -m gunicorn app:app -b 0.0.0.0 -D && echo "Done"
+
+deactivate
+
+
+
