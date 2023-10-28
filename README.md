@@ -10,9 +10,10 @@ I began by initiating a new workflow by branching out to `stage` in Git. Using t
 - one with Terraform, using [this user data](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/firstinfrastruture/deployterraform.sh).
 
 Here is how our first infrastructure was created with Terraform:
-(insert first infrastructure here.)
+![d6 p1 drawio](https://github.com/auzhangLABS/c4_deployment-6-main/assets/138344000/c9bf56bb-d5a5-42b2-85f2-94e27f89ad6f)
 
-In our Jenkins file, we utilized the Jenkins agent for specific stages in the deployment. View the [Jenkinfile](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/Jenkinsfile) to see how we create and connect to a Jenkin Agent, click [here!](https://github.com/auzhangLABS/c4_deployment5.1)
+
+In our Jenkins file, we utilized the Jenkins agent for specific stages in the deployment including creating our second infrastructure. View the [Jenkinfile](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/Jenkinsfile) to see how we create and connect to a Jenkin Agent, click [here!](https://github.com/auzhangLABS/c4_deployment5.1)
 
 Then I began building the second infrastructure. Here, I used another [Terraform file](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/initTerraform/main.tf) that I made, to create two VPCs - one in `us-east-1` and the other in `us-west-2`. Each VPC has:
 - 2 Availability Zones
@@ -21,7 +22,10 @@ Then I began building the second infrastructure. Here, I used another [Terraform
 - 1 Route Table
 - 1 Security Group with ports 22 and 8000 open for access
 
-Each instance was configured with user data to install certain packages and configurations. Here is a detailed explanations:
+Here is a visualization of our second infrastructure created with Terraform:
+
+
+Each instance was configured with user data to install certain packages and configurations. Here is a detailed explanation:
 - software-properties-common: manage software repositories from the command line.
 - add-apt-repository -y ppa:deadsnakes/ppa: adding a Personal Package Archive with the newer version of Python that might not be available on Ubuntu.
 - python3.7: Installing python 3.7 
@@ -35,7 +39,8 @@ Then enter the python virtual environment, and installed the following packages:
 - pip install gunicorn: install Gunicorn web serverpackage.
  
 To see the full data script, click [here!](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/initTerraform/deploypython.sh). After the instance is set up, you can check its status by checking each instance's IP to see if the banking application is working. See my example below:
-[photo here]
+![all4](https://github.com/auzhangLABS/c4_deployment-6-main/assets/138344000/34eeaebc-f298-4557-9e4f-fc73d09d2777)
+
 
 #### Creating an RDS (Relational Database Service) database:
 1. Access to AWS Amazon RDS:
@@ -70,7 +75,8 @@ Please note: Make sure you destroy your second infrastructure previously set up 
 We created a multibranch pipeline to execute the Jenkinsfile. Once it's successful, we have to double-check our infrastructure and our banking application on each instance.
 
 #### Create a Security Group for the Application Load Balancer
-Create a new security group that allows new inbound rules for HTTP from all sources. Repeat for the other region.
+Create a new security group that allows new inbound rules for HTTP from all sources. Repeat for the other region. Here is an example of my security group:
+![image](https://github.com/auzhangLABS/c4_deployment-6-main/assets/138344000/49e2d15b-4325-46f0-b61a-8575289b4934)
 
 #### Create a Load Balancer
 1. Access AWS load balancing:
@@ -104,7 +110,8 @@ Create a new security group that allows new inbound rules for HTTP from all sour
    - click Actions  -> edit rules -> add target group
    - add another target group (instance 2). Here, the weight of traffic would be 50/50.
    - click save
-6. Check the DNS name to verify the banking application works, and repeat the process for the other region.
+6. Check the DNS name to verify the banking application works, and repeat the process for the other region. Here is my example, showing the use of Application Load Balancer DNS for both region:
+![alb](https://github.com/auzhangLABS/c4_deployment-6-main/assets/138344000/9aaa5dd9-a4c6-4e04-89e8-d2d7baa112fb)
 
 Please note: This was done in a new branch called Stage. Once this was working, I merged it into the main
 
