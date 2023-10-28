@@ -1,7 +1,7 @@
 # Deployment 6 Documentation
 
 ## Purpose:
-The primary goal of deployment 6 is to familiarize ourselves with using the Jenkins agent to launch our AWS infrastructure using Terraform. Additionally, we would start utilizing an application load balancer to balance traffic between two instances. We would adopt the use of a shared relational database service (RDS), which allows consistent data to be shared with all the instances. This deployment challenges us to proactively address how to make our infrastructure highly available and scalable while ensuring data consistency across the infrastructure.
+The primary goal of deployment 6 is to familiarize ourselves with using the Jenkins agent to launch our AWS infrastructure using Terraform. Additionally, we would start utilizing an application load balancer to balance traffic between two instances. We would adopt a shared relational database service (RDS), which allows consistent data to be shared with all the instances, transitioning to a two-tier architecture. This deployment challenges us to proactively address how to make our infrastructure highly available and scalable while ensuring data consistency across the infrastructure.
 
 ## Steps:
 #### Establishing AWS Infrastructure using Terraform
@@ -13,7 +13,7 @@ Here is how our first infrastructure was created with Terraform:
 ![d6 p1 drawio](https://github.com/auzhangLABS/c4_deployment-6-main/assets/138344000/c9bf56bb-d5a5-42b2-85f2-94e27f89ad6f)
 
 
-In our Jenkins file, we utilized the Jenkins agent for specific stages in the deployment including creating our second infrastructure. View the [Jenkinfile](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/Jenkinsfile) to see how we create and connect to a Jenkin Agent, click [here!](https://github.com/auzhangLABS/c4_deployment5.1)
+In our Jenkins file, we utilized the Jenkins agent for specific stages in the deployment, including creating our second infrastructure. View the [Jenkinfile](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/Jenkinsfile) to see how we create and connect to a Jenkin Agent, click [here!](https://github.com/auzhangLABS/c4_deployment5.1)
 
 Then I began building the second infrastructure. Here, I used another [Terraform file](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/initTerraform/main.tf) that I made, to create two VPCs - one in `us-east-1` and the other in `us-west-2`. Each VPC has:
 - 2 Availability Zones
@@ -114,10 +114,10 @@ Create a new security group that allows new inbound rules for HTTP from all sour
 6. Check the DNS name to verify the banking application works, and repeat the process for the other region. Here is my example, showing the use of Application Load Balancer DNS for both region:
 ![alb](https://github.com/auzhangLABS/c4_deployment-6-main/assets/138344000/9aaa5dd9-a4c6-4e04-89e8-d2d7baa112fb)
 
-Please note: This was done in a new branch called Stage. Once this was working, I merged it into the main
+Please note: This was done in a new branch called Stage. Once this was working, I merged it into the main in Git
 
 ## System Design Diagram:
-(System Design Diagram here)
+![d6 p3 drawio](https://github.com/auzhangLABS/c4_deployment-6-main/assets/138344000/e4d8d81e-5514-43ae-965b-88f32e9eb662)
 
 To view the full system design diagram, click [here!](link to)
 
