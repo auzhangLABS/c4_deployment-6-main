@@ -5,36 +5,36 @@ The primary goal of deployment 6 is to familiarize ourselves with using the Jenk
 
 ## Steps:
 #### Establishing AWS Infrastructure using Terraform
-I began by initiating a new workflow by branching out to `stage` in Git. From here, I used Terraform to create our first infrastructure, which created two instances in my default VPC. These instances consisted of:
-- one with Jenkins, using [this user data](Jenkins user data)
-- one with Terraform, using [this user data](terraform )
+I began by initiating a new workflow by branching out to `stage` in Git. Using the [Terraform file](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/firstinfrastruture/main.tf) that I crafted, which created two instances in my default VPC. These instances consisted of:
+- one with Jenkins, using [this user data](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/firstinfrastruture/deployjenkins.sh).
+- one with Terraform, using [this user data](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/firstinfrastruture/deployterraform.sh).
 
 Here is how our first infrastructure was created with Terraform:
 (insert first infrastructure here.)
 
-In our Jenkins file, we utilized the Jenkins agent for specific stages in the deployment. View the [Jenkinfile](Jenkinsfile) to see how we create and connect to a Jenkin Agent, click [here!](https://github.com/auzhangLABS/c4_deployment5.1)
+In our Jenkins file, we utilized the Jenkins agent for specific stages in the deployment. View the [Jenkinfile](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/Jenkinsfile) to see how we create and connect to a Jenkin Agent, click [here!](https://github.com/auzhangLABS/c4_deployment5.1)
 
-Then I began building the second infrastructure. Here, I used Terraform to create two VPCs - one in `us-east-1` and the other in `us-west-2`. Each VPC has:
--2 Availability Zones
--2 Public Subnets
--2 EC2 Instances
--1 Route Table
--1 Security Group with ports 22 and 8000 open for access
+Then I began building the second infrastructure. Here, I used another [Terraform file](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/initTerraform/main.tf) that I made, to create two VPCs - one in `us-east-1` and the other in `us-west-2`. Each VPC has:
+- 2 Availability Zones
+- 2 Public Subnets
+- 2 EC2 Instances
+- 1 Route Table
+- 1 Security Group with ports 22 and 8000 open for access
 
-Each instance was configured with user data to install certain packages and configurations. Here is a detailed explanation:
+Each instance was configured with user data to install certain packages and configurations. Here is a detailed explanations:
 - software-properties-common: manage software repositories from the command line.
 - add-apt-repository -y ppa:deadsnakes/ppa: adding a Personal Package Archive with the newer version of Python that might not be available on Ubuntu.
 - python3.7: Installing python 3.7 
 - python3.7-venv: Set up a lightweight, isolated Python environment.
 - build-essential: Installed the required tools for compiling and building software.
-- libmysqlclient-dev: Provides the necessary files or library that are needed for Python to interact with MySQL. 
+- libmysqlclient-dev: Provides the necessary files or libraries that are needed for Python to interact with MySQL. 
 - python3.7-dev: Extend the capabilities of Python.<br>
 
 Then enter the python virtual environment, and installed the following packages:
 - pip install mysqlclient: Installs MySQL database driver for Python.
 - pip install gunicorn: install Gunicorn web serverpackage.
  
-To see the full data script, click [here!](deploy python .sh). After the instance is set up, you can check its status by checking each instance's IP to see if the banking application is working. See my example below:
+To see the full data script, click [here!](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/initTerraform/deploypython.sh). After the instance is set up, you can check its status by checking each instance's IP to see if the banking application is working. See my example below:
 [photo here]
 
 #### Creating an RDS (Relational Database Service) database:
@@ -70,11 +70,11 @@ Please note: Make sure you destroy your second infrastructure previously set up 
 We created a multibranch pipeline to execute the Jenkinsfile. Once it's successful, we have to double-check our infrastructure and our banking application on each instance.
 
 #### Create a Security Group for the Application Load Balancer
-Create a new Security Group that allows new inbound rules of HTTP of all Sources. Repeat for the other region.
+Create a new security group that allows new inbound rules for HTTP from all sources. Repeat for the other region.
 
 #### Create a Load Balancer
 1. Access AWS load balancing:
-   - Navigate over the Target Groups under Load Balancing within EC2 instance menu.
+   - Navigate over the Target Groups under Load Balancing within the EC2 instance menu.
 2. Create Target Group:
    - Enter a `target group name` in the Target group name
    - Change the port to 8000
@@ -89,24 +89,24 @@ Create a new Security Group that allows new inbound rules of HTTP of all Sources
 4. Create an application load balancer:
    - Click on Create Load Balancer and choose Create an Application Load Balancer.
    - In Basic Configuration:
-     - Enter a `load balancer name` in Load Balancer name.
+     - Enter a `load balancer name` in the Load Balancer name.
      - Select the VPC you want the load balancer to be in.
      - Select subnets
      - Choose your security group
    - In Listeners and Routing:
      - Select an instance for the default instance.
      - Click Create a load balancer
-   - View the Load balancer and wait until the status is Active then take the DNS name and go to the URL.
+   - View the Load balancer and wait until the status is active, then take the DNS name and go to the URL.
 5. Adding another target group for the load balancer
    - Go to Listeners and Rules and click on the Listeners you would like to modify
    - click manage rule -> click edit rules
-   - click on the listeners rules you would like to modify
+   - click on the listeners' rules you would like to modify
    - click Actions  -> edit rules -> add target group
    - add another target group (instance 2). Here, the weight of traffic would be 50/50.
    - click save
-6. Check the DNS name to verify the banking application works and repeat the process for the other region.
+6. Check the DNS name to verify the banking application works, and repeat the process for the other region.
 
-Please note: This was done in a new branch called stage. Once this was working, I merged it into the main
+Please note: This was done in a new branch called Stage. Once this was working, I merged it into the main
 
 ## System Design Diagram:
 (System Design Diagram here)
@@ -114,13 +114,13 @@ Please note: This was done in a new branch called stage. Once this was working, 
 To view the full system design diagram, click [here!](link to)
 
 ## Issues and Troubleshooting
-During the setup of the 2nd infrastructure, I encountered a problem with the user data. Whenever I tried to attempt an operation like `git clone` it wouldn't execute. I fix this problem by providing the absolute path, like `/usr/bin/git`. This pattern held for other commands as well.
+During the setup of the second infrastructure, I encountered a problem with the user data. Whenever I tried to attempt an operation like `git clone` it wouldn't execute. I fix this problem by providing the absolute path, like `/usr/bin/git`. This pattern held for other commands as well.
 
 
 ## Optimization
 1. Application Load Balancer and Security Group: include the setup of ALB and new SG directly in the Terraform Script
 2. Amazon Cloudfront: Incorporate a CDN for static files to reduce latency and reduce server stain
-3. Network Load Balancer: Use a Network load balancer to distribute traffic to the application load balancer in different regions.
+3. Network Load Balancer: Use a network load balancer to distribute traffic to the application load balancer in different regions.
 4. Ulitze NGINX: use NGINX as a front end to optimize request
 5. Private Subnet: places application server and database in the private subnet to increase security
 
