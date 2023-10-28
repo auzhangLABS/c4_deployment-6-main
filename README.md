@@ -23,6 +23,7 @@ Then I began building the second infrastructure. Here, I used another [Terraform
 - 1 Security Group with ports 22 and 8000 open for access
 
 Here is a visualization of our second infrastructure created with Terraform:
+![d6 p2 drawio](https://github.com/auzhangLABS/c4_deployment-6-main/assets/138344000/544130be-8b62-4ca1-a9cd-2a42f3025655)
 
 
 Each instance was configured with user data to install certain packages and configurations. Here is a detailed explanation:
