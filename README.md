@@ -1,26 +1,78 @@
-<p align="center">
-<img src="https://github.com/kura-labs-org/kuralabs_deployment_1/blob/main/Kuralogo.png">
-</p>
-<h1 align="center">C4_deployment-6<h1> 
+# Deployment 6 Documentation
 
-Demonstrate your ability to deploy an infrastructure with Terraform.
+## Purpose:
+The primary goal of deployment 6 is to familiarize ourselves with using the Jenkins agent to launch our AWS infrastructure using Terraform. Additionally, we would start utilizing an application load balancer to balance traffic between two instances. We would adopt the use of a shared relational database service (RDS), which allows consistent data to be shared with all the instances. This deployment challenges us to proactively address how to make our infrastructure highly available and scalable while ensuring data consistency across the infrastructure.
 
-- Create a separate GitHub repository for this application 
+## Steps:
+#### Establishing AWS Infrastructure using Terraform
+I began by initiating a new workflow by branching out to `stage` in Git. From here, I used Terraform to create our first infrastructure, which created two instances in my default VPC. These instances comprised of:
+- one with Jenkins, using [this user data](Jenkins user data)
+- one with Terraform, using [this user data](terraform )
 
-- Download the files from this repository and upload them to your newly created repository 
+Here is how our first infrastructure was created with Terraform:
+(insert first infrastructure here.)
 
-- Be sure to follow the deployment instructions from this repository  
+In our Jenkins file, we utilized the Jenkins agent for specific stages in the deployment. View the [Jenkinfile](Jenkinsfile) to see how we create and connect to a Jenkin Agent, click [here!](https://github.com/auzhangLABS/c4_deployment5.1)
 
-- Document your progress in a .md file in your repository. Also, document any issues you may run into and what you did to fix them.
+Then I began building the second infrastructure. Here, I used Terraform to create two VPCs - one in `us-east-1` and the other in `us-west-2`. Each VPC has:
+-2 Availability Zones
+-2 Public Subnets
+-2 EC2 Instances
+-1 Route Table
+-1 Security Group with ports 22 and 8000 open for access
 
-- Make sure your documentation includes these sections:
-  - Purpose
-  - Issues
-  - Steps
-  - System Diagram (Your diagram must include the default VPC, Regions East and West VPCs)
-  - Optimization (How would make this deployment more efficient, if you utilize ChatGPT make sure to explain what your prompt was.)
+Each instance was configured with user data to install certain packages and configurations. Here is a detailed explanation:
+- software-properties-common: manage software repositories from the command line.
+- add-apt-repository -y ppa:deadsnakes/ppa: adding a Personal Package Archive with the newer version of Python that might not be available on Ubuntu.
+- python3.7: Installing python 3.7 
+- python3.7-venv: Set up a lightweight, isolated Python environment.
+- build-essential: Installed the required tools for compiling and building software.
+- libmysqlclient-dev: Provides the necessary files or library that are needed for Python to interact with MySQL. 
+- python3.7-dev: Extend the capabilities of Python.<br>
 
-- Lastly, save your documentation and diagram into your repository. Submit your repository link to the LMS
+Then enter the python virtual environment, and installed the following packages:
+- pip install mysqlclient: Installs MySQL database driver for Python.
+- pip install gunicorn: install Gunicorn web serverpackage.
+ 
+To see the full data script, click [here!](deploy python .sh). After the instance is set up, you can check its status by checking each instance's IP to see if the banking application is working. See my example below:
+[photo here]
 
-## Deployment instructions Link:
--  Link to instructions: https://github.com/kura-labs-org/c4_deployment-6/blob/main/Deployment-instructions.md
+#### Creating an RDS (Relational Database Service) database:
+1. Access to AWS Amazon EDS:
+  - Navigate to Amazon RDS
+2. Start creating the database:
+  - Click on Create Database -> MySQL -> Free Tier
+3. Configure Database Setting:
+  - Change DB instance identifier to `mydatabase`
+  - Create your password
+4. Additional Configuration:
+  - Select `yes` for Public access
+  - Enter `banking` into the Initial database name
+  - Deselect encryption
+5. Finalize
+  - Create Database
+6. Post-Database Configuration:
+  - Update the DATABASE_URL in database.py, load_data.py, and app.py. 
+  - The format is `mysql+mysqldb://admin:[my_password]@[endpoint_url]/[database_name]?charset=utf8mb4`, replace `my_password`, `endpoint_url`, and `database_name` with the information provided from the database.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
