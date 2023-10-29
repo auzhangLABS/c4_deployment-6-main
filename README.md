@@ -119,7 +119,7 @@ Please note: This was done in a new branch called Stage. Once this was working, 
 ## System Design Diagram:
 ![d6 p3 drawio](https://github.com/auzhangLABS/c4_deployment-6-main/assets/138344000/e4d8d81e-5514-43ae-965b-88f32e9eb662)
 
-To view the full system design diagram, click [here!](link to)
+To view the full system design diagram, click [here!](https://github.com/auzhangLABS/c4_deployment-6-main/blob/stage/d6.diagram.png)
 
 ## Issues and Troubleshooting
 During the setup of the second infrastructure, I encountered a problem with the user data. Whenever I tried to attempt an operation like `git clone` it wouldn't execute. I fix this problem by providing the absolute path, like `/usr/bin/git`. This pattern held for other commands as well.
